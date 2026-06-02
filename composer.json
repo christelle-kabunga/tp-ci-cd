@@ -13,9 +13,9 @@
         }
     },
    "scripts": {
-    "test": "./vendor/bin/phpunit",
-    "test-coverage": "./vendor/bin/phpunit --coverage-text",
-    "lint": "./vendor/bin/phpcs src/ --standard=PSR12 || true",
-    "analyse": "./vendor/bin/phpstan analyse src/ --level=5 || true"
+    "test": "php vendor/bin/phpunit",
+    "test-coverage": "php vendor/bin/phpunit --coverage-text",
+    "lint": "php vendor/bin/phpcs src/ --standard=PSR12",
+    "analyse": "php vendor/bin/phpstan analyse src/ --level=5"
 }
 }
