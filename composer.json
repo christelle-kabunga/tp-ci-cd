@@ -1,0 +1,17 @@
+{
+    "name": "tp/ci-cd-library",
+    "description": "Simple library management system for CI/CD demo",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Library\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "test-coverage": "./vendor/bin/phpunit --coverage-text"
+    }
+}
