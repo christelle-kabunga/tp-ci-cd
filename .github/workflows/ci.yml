@@ -7,21 +7,43 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  # Job 1 : Tests unitaires
+  tests:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Vérification du code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
     
-    - name: Installation de PHP
+    - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
         tools: composer, phpunit
     
-    - name: Installation des dépendances
+    - name: Install dependencies
       run: composer install --no-progress
     
-    - name: Exécution des tests
+    - name: Run unit tests
       run: composer test
+  
+  # Job 2 : Qualité du code
+  quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        tools: composer, phpcs, phpstan
+    
+    - name: Install dependencies
+      run: composer install --no-progress
+    
+    - name: Check coding standards
+      run: composer lint
+    
+    - name: Static analysis
+      run: composer analyse
