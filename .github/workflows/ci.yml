@@ -5,120 +5,64 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
-  # ============================================
-  # JOB 1 : TESTS UNITAIRES
-  # ============================================
   tests:
-    name: Tests unitaires
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout du code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
     
-    - name: 🔧 Installation PHP
+    - name: Install PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
-        tools: composer
-        coverage: none
     
-    - name: 📦 Installation des dépendances
-      run: composer install --no-progress --no-interaction
+    - name: Install Composer dependencies
+      run: composer install --no-progress
     
-    - name: ✅ Exécution des tests
-      run: |
-        php vendor/bin/phpunit --version
-        php vendor/bin/phpunit --no-coverage
+    - name: Verify autoloader
+      run: php -r "require 'vendor/autoload.php'; echo 'Autoload OK\n';"
+    
+    - name: Run PHPUnit tests
+      run: ./vendor/bin/phpunit
 
-  # ============================================
-  # JOB 2 : QUALITÉ DU CODE
-  # ============================================
   quality:
-    name: Qualité du code
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout du code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
     
-    - name: 🔧 Installation PHP
+    - name: Install PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
-        tools: composer
     
-    - name: 📦 Installation des dépendances
-      run: composer install --no-progress --no-interaction
+    - name: Install Composer dependencies
+      run: composer install --no-progress
     
-    - name: 🎨 Vérification du style de code (PSR-12)
-      run: |
-        php vendor/bin/phpcs src/ --standard=PSR12 --report=full || echo "⚠️ Des violations ont été trouvées"
+    - name: PHP_CodeSniffer
+      run: ./vendor/bin/phpcs src/ --standard=PSR12
     
-    - name: 🔍 Analyse statique (PHPStan)
-      run: |
-        php vendor/bin/phpstan analyse src/ --level=5 --no-progress || echo "⚠️ Des erreurs ont été trouvées"
-    
-    - name: 📝 Vérification de la syntaxe PHP
-      run: |
-        find src/ -name "*.php" -exec php -l {} \; | grep -v "No syntax errors"
+    - name: PHPStan
+      run: ./vendor/bin/phpstan analyse src/ --level=5
 
-  # ============================================
-  # JOB 3 : DÉPLOIEMENT AUTOMATIQUE
-  # ============================================
   deploy:
-    name: Déploiement
     runs-on: ubuntu-latest
     needs: [tests, quality]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && success()
     
     steps:
-    - name: 📥 Checkout du code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
     
-    - name: 🔧 Installation PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        tools: composer
-    
-    - name: 📦 Installation des dépendances (production seulement)
-      run: composer install --no-dev --no-progress --no-interaction
-    
-    - name: 🚀 Création du package de déploiement
+    - name: Create deployment package
       run: |
-        # Crée un dossier deploy
-        mkdir -p deploy/app
-        
-        # Copie les fichiers
-        cp -r src deploy/app/
-        cp composer.json deploy/app/
-        cp -r vendor deploy/app/ 2>/dev/null || true
-        
-        # Crée un fichier de version
-        echo "{\"version\":\"${{ github.sha }}\",\"date\":\"$(date -Iseconds)\",\"branch\":\"${{ github.ref_name }}\"}" > deploy/version.json
-        
-        # Affiche le contenu
-        ls -la deploy/
-        ls -la deploy/app/
+        mkdir deploy
+        cp -r src deploy/
+        cp composer.json deploy/
     
-    - name: 💾 Upload de l'artefact (pour simulation)
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: application-deployee-${{ github.run_id }}
+        name: app-deployment
         path: deploy/
-    
-    - name: 📢 Simulation de notification de déploiement
-      run: |
-        echo "=============================================="
-        echo "✅ DÉPLOIEMENT RÉUSSI !"
-        echo "=============================================="
-        echo "📦 Application : Bibliothèque PHP"
-        echo "🔖 Version : ${{ github.sha }}"
-        echo "🌿 Branche : ${{ github.ref_name }}"
-        echo "🕐 Date : $(date)"
-        echo "📁 Package disponible dans les artefacts"
-        echo "=============================================="
