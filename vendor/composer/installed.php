@@ -3,7 +3,7 @@
         'name' => 'tp/ci-cd-library',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e9e9b16a33075ca1f8837345edb6aaac91959b1e',
+        'reference' => 'c857e08b73a215c4caccc6d521b97434598232ce',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -283,7 +283,7 @@
         'tp/ci-cd-library' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e9e9b16a33075ca1f8837345edb6aaac91959b1e',
+            'reference' => 'c857e08b73a215c4caccc6d521b97434598232ce',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
