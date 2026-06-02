@@ -25,7 +25,7 @@ class Library
         }
 
         $book = $this->books[$isbn];
-        
+
         if ($book->isBorrowed()) {
             return false; // Cannot remove borrowed book
         }
@@ -85,14 +85,14 @@ class Library
 
     public function getAvailableBooks(): array
     {
-        return array_filter($this->books, function(Book $book) {
+        return array_filter($this->books, function (Book $book) {
             return !$book->isBorrowed();
         });
     }
 
     public function getBorrowedBooks(): array
     {
-        return array_filter($this->books, function(Book $book) {
+        return array_filter($this->books, function (Book $book) {
             return $book->isBorrowed();
         });
     }

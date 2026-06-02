@@ -65,7 +65,7 @@ class Member
     public function returnBook(Book $book): bool
     {
         $key = array_search($book, $this->borrowedBooks, true);
-        
+
         if ($key === false) {
             return false;
         }

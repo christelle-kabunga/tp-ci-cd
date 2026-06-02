@@ -49,7 +49,7 @@ class Book
         if ($this->isBorrowed) {
             return false;
         }
-        
+
         $this->isBorrowed = true;
         $this->borrowedBy = $member;
         return true;
@@ -60,7 +60,7 @@ class Book
         if (!$this->isBorrowed) {
             return false;
         }
-        
+
         $this->isBorrowed = false;
         $this->borrowedBy = null;
         return true;
