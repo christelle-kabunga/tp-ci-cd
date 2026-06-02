@@ -23,7 +23,7 @@ jobs:
       run: composer install --no-progress
     
     - name: Run unit tests
-      run: php vendor/bin/phpunit
+      run: php vendor/phpunit/phpunit/phpunit
   
   quality:
     runs-on: ubuntu-latest

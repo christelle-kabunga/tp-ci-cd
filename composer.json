@@ -13,8 +13,8 @@
         }
     },
     "scripts": {
-        "test": "@php vendor/phpunit/phpunit/phpunit",
-        "test-coverage": "@php vendor/phpunit/phpunit/phpunit --coverage-text",
+        "test": "php vendor/phpunit/phpunit/phpunit",
+        "test-coverage": "php vendor/phpunit/phpunit/phpunit --coverage-text",
         "lint": "@php vendor/bin/phpcs src/ --standard=PSR12",
         "analyse": "@php vendor/bin/phpstan analyse src/ --level=5"
     }
